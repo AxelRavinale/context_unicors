@@ -13,7 +13,7 @@ const ProductsView = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://crudcrud.com/api/713c93db8a1145d49a03ed9eeae4415d/products');
+        const response = await fetch('https://crudcrud.com/api/e8e0c05322fe4f2596118ced85c8b56b/products');
         const data = await response.json();
         setProducts(data);
       } catch (error) {
