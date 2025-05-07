@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { useToast } from '../context/ToastContext';
 
-const API_BASE = 'https://crudcrud.com/api/e8e0c05322fe4f2596118ced85c8b56b/products';
+const API_BASE = 'https://crudcrud.com/api/3e4949cf679041c3b78bfece8f4ece2a/products';
 
 const ProductForm = () => {
   const navigate = useNavigate();

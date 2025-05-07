@@ -1,9 +1,20 @@
 // src/unicorns/UnicornsView.jsx
 import React, { useState } from 'react';
-import { Button, Table, Form, Row, Col, Container, Pagination } from 'react-bootstrap';
+import {
+  Button,
+  Table,
+  Form,
+  Row,
+  Col,
+  Container,
+  Pagination,
+} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useUnicorns } from '../context/UnicornContext';
 import { useTheme } from '../context/ThemeContext';
+
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'; // 👈 Importación correcta
 
 const UnicornsView = () => {
   const navigate = useNavigate();
@@ -18,12 +29,31 @@ const UnicornsView = () => {
   );
 
   const totalPages = Math.ceil(filtered.length / perPage);
-  const currentItems = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const currentItems = filtered.slice(
+    (currentPage - 1) * perPage,
+    currentPage * perPage
+  );
 
   const handleDelete = (id) => {
     if (window.confirm('¿Eliminar este unicornio? 🦄')) {
       deleteUnicorn(id);
     }
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Lista de Unicornios 🦄', 14, 15);
+
+    const tableColumn = ['Nombre', 'Color', 'Edad'];
+    const tableRows = unicorns.map((u) => [u.nombre, u.color, u.edad]);
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save('unicorns.pdf');
   };
 
   return (
@@ -43,7 +73,12 @@ const UnicornsView = () => {
           />
         </Col>
         <Col md="auto">
-          <Button onClick={() => navigate('/unicornios/crear')}>➕ Nuevo unicornio</Button>
+          <Button onClick={() => navigate('/unicornios/crear')}>
+            ➕ Nuevo unicornio
+          </Button>{' '}
+          <Button variant="secondary" onClick={exportToPDF}>
+            📄 Exportar PDF
+          </Button>
         </Col>
       </Row>
 
@@ -85,7 +120,11 @@ const UnicornsView = () => {
                   >
                     ✏️ Editar
                   </Button>{' '}
-                  <Button variant="danger" size="sm" onClick={() => handleDelete(u._id)}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(u._id)}
+                  >
                     🗑️ Eliminar
                   </Button>
                 </td>
